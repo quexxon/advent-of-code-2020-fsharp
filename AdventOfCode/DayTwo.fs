@@ -22,18 +22,27 @@ let parseInputLine (line: string): PasswordPolicy * Password =
     | _ -> failwith "Invalid input format"
 
 let isValidPassword (policy: PasswordPolicy, Password password): bool =
-    let rec loop occurences password =
-        if Seq.isEmpty password then
+    let rec loop x y occurences =
+        if x > y then
             (occurences >= policy.Min)
             && (occurences <= policy.Max)
         elif occurences > policy.Max then
             false
-        elif Seq.head password = policy.Char then
-            loop (occurences + 1) (Seq.tail password)
+        elif x = y then
+            loop
+                (x + 1)
+                (y - 1)
+                (occurences
+                 + if password.[x] = policy.Char then 1 else 0)
         else
-            loop occurences (Seq.tail password)
+            loop
+                (x + 1)
+                (y - 1)
+                (occurences
+                 + (if password.[x] = policy.Char then 1 else 0)
+                 + (if password.[y] = policy.Char then 1 else 0))
 
-    loop 0 password
+    loop 0 (password.Length - 1) 0
 
 let isValidPassword' (policy: PasswordPolicy, Password password): bool =
     (password.[policy.Min - 1] = policy.Char)
