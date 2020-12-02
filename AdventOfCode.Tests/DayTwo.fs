@@ -88,6 +88,16 @@ let ``Test isValidPassword`` =
               Expect.isTrue
                   (isValidPassword (policy, password))
                   "Valid: 'c' occurs between 2 and 9 times"
+          }
+          test "Problematic example #1" {
+              // Password has an odd number of characters with the deciding
+              // occurrence in the middle position.
+              let policy = { Min = 2; Max = 3; Char = 'd' }
+              let password = Password "dcddd"
+
+              Expect.isFalse
+                  (isValidPassword (policy, password))
+                  "Invalid: 'd' occurs more than 3 times"
           } ]
 
 [<Tests>]
