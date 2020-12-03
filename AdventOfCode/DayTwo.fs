@@ -49,17 +49,22 @@ let isValidPassword' (policy: PasswordPolicy, Password password): bool =
     <> (password.[policy.Max - 1] = policy.Char)
 
 let part1 input =
-    input |> Seq.filter isValidPassword |> Seq.length
+    input
+    |> Array.filter isValidPassword
+    |> Array.length
 
 let part2 input =
-    input |> Seq.filter isValidPassword' |> Seq.length
+    input
+    |> Array.filter isValidPassword'
+    |> Array.length
 
 type Solution() as self =
     inherit Util.Solution<int>("Day Two", "02.txt")
 
     let input =
         File.ReadLines self.InputPath
-        |> Seq.map parseInputLine
+        |> Array.ofSeq
+        |> Array.map parseInputLine
 
     override __.Part1() = part1 input
 

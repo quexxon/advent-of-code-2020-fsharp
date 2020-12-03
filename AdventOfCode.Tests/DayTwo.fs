@@ -4,9 +4,9 @@ open AdventOfCode.DayTwo
 open Expecto
 
 let input =
-    [ ({ Min = 1; Max = 3; Char = 'a' }, Password "abcde")
-      ({ Min = 1; Max = 3; Char = 'b' }, Password "cdefg")
-      ({ Min = 2; Max = 9; Char = 'c' }, Password "ccccccccc") ]
+    [| ({ Min = 1; Max = 3; Char = 'a' }, Password "abcde")
+       ({ Min = 1; Max = 3; Char = 'b' }, Password "cdefg")
+       ({ Min = 2; Max = 9; Char = 'c' }, Password "ccccccccc") |]
 
 [<Tests>]
 let ``Test parseInputLine`` =
