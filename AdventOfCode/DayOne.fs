@@ -39,9 +39,7 @@ type Solution() as self =
     inherit Util.Solution<int>("Day One", "01.txt")
 
     let input =
-        File.ReadLines self.InputPath
-        |> Array.ofSeq
-        |> Array.map int
+        File.ReadAllLines self.InputPath |> Array.map int
 
     override __.Part1() = part1 (Array.copy input)
 

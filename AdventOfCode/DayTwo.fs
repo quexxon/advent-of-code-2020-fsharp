@@ -62,8 +62,7 @@ type Solution() as self =
     inherit Util.Solution<int>("Day Two", "02.txt")
 
     let input =
-        File.ReadLines self.InputPath
-        |> Array.ofSeq
+        File.ReadAllLines self.InputPath
         |> Array.map parseInputLine
 
     override __.Part1() = part1 input
