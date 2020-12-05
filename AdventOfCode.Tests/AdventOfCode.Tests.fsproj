@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode\AdventOfCode.fsproj" />
@@ -10,6 +11,7 @@
     <Compile Include="DayOne.fs" />
     <Compile Include="DayTwo.fs" />
     <Compile Include="DayThree.fs" />
+    <Compile Include="DayFour.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
