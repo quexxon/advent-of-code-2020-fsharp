@@ -3,34 +3,19 @@ module AdventOfCode.DayFive
 open System.IO
 
 let calculateSeatId (code: string) =
-    let rows = 128
-    let cols = 8
+    let lastIndex = code.Length - 1
+    let mutable id = 0
 
-    let rec loop i rows cols rlb rub clb cub =
-        if i = code.Length then
-            rlb * 8 + clb
-        else
-            match code.[i] with
-            | 'B' ->
-                let rows = rows >>> 1
-                loop (i + 1) rows cols (rlb + rows) rub clb cub
-            | 'F' ->
-                let rows = rows >>> 1
-                loop (i + 1) rows cols rlb (rub - rows) clb cub
-            | 'R' ->
-                let cols = cols >>> 1
-                loop (i + 1) rows cols rlb rub (clb + cols) cub
-            | 'L' ->
-                let cols = cols >>> 1
-                loop (i + 1) rows cols rlb rub clb (cub - cols)
-            | chr -> failwith $"Unexpected character: {chr}"
+    for i = 0 to lastIndex do
+        let chr = code.[i]
+        if chr = 'B' || chr = 'R' then id <- id ||| (1 <<< (lastIndex - i))
 
-    loop 0 rows cols 0 (rows - 1) 0 (cols - 1)
+    id
 
 let part1 input =
-    let seatIds = Array.map calculateSeatId input
-    Array.sortInPlace seatIds
-    Array.last seatIds
+    input
+    |> Array.maxBy calculateSeatId
+    |> calculateSeatId
 
 let part2 input =
     let seatIds = Array.map calculateSeatId input
