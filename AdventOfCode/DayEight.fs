@@ -37,26 +37,7 @@ module CPU =
           PC = 0
           Acc = 0 }
 
-    let run (cpu: CPU): Result<int, int> =
-        let rec tick () =
-            if cpu.PC = cpu.Memory.Length then
-                Ok cpu.Acc
-            elif cpu.Visited.[cpu.PC] then
-                Error cpu.PC
-            else
-                let instruction = cpu.Memory.[cpu.PC]
-                cpu.Visited.[cpu.PC] <- true
-                match instruction with
-                | Nop _ -> cpu.PC <- cpu.PC + 1
-                | Acc value ->
-                    cpu.PC <- cpu.PC + 1
-                    cpu.Acc <- cpu.Acc + value
-                | Jmp offset -> cpu.PC <- cpu.PC + offset
-                tick ()
-
-        tick ()
-
-    let runWithStack (cpu: CPU) (stack: Stack<StackFrame>): Result<int, int> =
+    let run (cpu: CPU) (stack: Stack<StackFrame>): Result<int, int> =
         let rec tick () =
             if cpu.PC = cpu.Memory.Length then
                 Ok cpu.Acc
@@ -82,17 +63,19 @@ module CPU =
 
 let part1 (program: Instruction []) =
     let cpu = CPU.create program
+    let stack = Stack<StackFrame>()
 
-    match CPU.run cpu with
+    match CPU.run cpu stack with
     | Ok _ -> failwith "No loop found"
     | Error _ -> cpu.Acc
 
 let part2 (program: Instruction []) =
     let cpu = CPU.create program
     let stack = Stack<StackFrame>()
+    let unwindStack = Stack<StackFrame>()
     let mutable result = None
 
-    match CPU.runWithStack cpu stack with
+    match CPU.run cpu stack with
     | Ok _ -> failwith "No loop found"
     | Error _ ->
         while stack.Count > 0 && result = None do
@@ -107,8 +90,7 @@ let part2 (program: Instruction []) =
             if frame.Instruction <> cpu.Memory.[frame.PC] then
                 cpu.PC <- frame.PC
                 cpu.Acc <- frame.Acc
-                let unwindStack = Stack<StackFrame>()
-                match CPU.runWithStack cpu unwindStack with
+                match CPU.run cpu unwindStack with
                 | Ok acc -> result <- Some acc
                 | _ ->
                     cpu.Memory.[frame.PC] <- frame.Instruction
