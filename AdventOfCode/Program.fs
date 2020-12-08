@@ -8,4 +8,5 @@ let main _argv =
     DayFour.Solution().Execute()
     DayFive.Solution().Execute()
     DaySix.Solution().Execute()
+    DaySeven.Solution().Execute()
     0
